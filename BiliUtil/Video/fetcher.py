@@ -48,7 +48,7 @@ class Fetcher:
             try:
                 album.sync(cookie)
             except Util.RunningError:
-                print("404 or 403 on: %d, skipped"%album.aid)
+                print("404 or 403 on: %s, skipped"%album.aid)
                 continue
             album_name = album.album_name(name_pattern)
 
