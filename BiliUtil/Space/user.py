@@ -96,7 +96,11 @@ class User:
         }
         album_list = []
         while True:
-            json_data = Util.http_get(**http_request)
+            try:
+                json_data = Util.http_get(**http_request)
+            except Util.RunningError:
+                print("404 or 403 on %d"%http_request)
+                continue
 
             # 循环获取列表
             album_list.extend([Video.Album(av['aid']) for av in json_data['data']['vlist']])

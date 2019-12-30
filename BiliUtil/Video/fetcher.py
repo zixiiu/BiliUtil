@@ -45,7 +45,11 @@ class Fetcher:
 
         album_list = self.obj.get_album_list()
         for album in album_list:
-            album.sync(cookie)
+            try:
+                album.sync(cookie)
+            except Util.RunningError:
+                print("404 or 403 on: %d, skipped"%album.aid)
+                continue
             album_name = album.album_name(name_pattern)
 
             video_list = album.get_video_list()
