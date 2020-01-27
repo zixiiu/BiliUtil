@@ -89,10 +89,12 @@ ex_list = [60100181,
            6834956,
            5398247,
            4828773,
-           80487424]
+           80487424,
+           18211445,
+           82449193]
 
-video_cache = r'D:\testv'
-cookie = "SESSDATA=e3ed7cf3%2C1580313737%2C8612f4c1"
+video_cache = r'D:\Testv'
+cookie = "SESSDATA=d742d5d2%2C1581626727%2Ca2844311"
 
 # 设置代理信息
 # BiliUtil.Config.HTTP_PROXY = 'http://127.0.0.1:8888'

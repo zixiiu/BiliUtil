@@ -172,25 +172,38 @@ def aria2c_pull(aid, path, name, url_list, show_process=False):
     process.wait()
 
 
-def ffmpeg_merge(path, name, show_process=False):
+def ffmpeg_merge(path, name, level, show_process=False):
+
     if show_process:
         out_pipe = None
     else:
         out_pipe = subprocess.PIPE
-    flv_file = os.path.abspath('{}/{}.flv'.format(path, name))
-    aac_file = os.path.abspath('{}/{}.aac'.format(path, name))
-    mp4_file = os.path.abspath('{}/{}.mp4'.format(path, name))
-    if os.path.exists(flv_file) and os.path.exists(aac_file):
-        shell = 'ffmpeg -i "{}" -i "{}" -c copy -f mp4 -y "{}"'
-        shell = shell.format(flv_file, aac_file, mp4_file)
-        process = subprocess.Popen(shell, stdout=out_pipe, stderr=out_pipe, shell=True)
-        process.wait()
-        os.remove(flv_file)
-        os.remove(aac_file)
-    elif os.path.exists(flv_file):
-        os.rename(flv_file, mp4_file)
+    if level == 'new_version':
+        flv_file = os.path.abspath('{}/{}.flv'.format(path, name))
+        aac_file = os.path.abspath('{}/{}.aac'.format(path, name))
+        mp4_file = os.path.abspath('{}/{}.mp4'.format(path, name))
+        if os.path.exists(flv_file) and os.path.exists(aac_file):
+            shell = 'ffmpeg -i "{}" -i "{}" -c copy -f mp4 -y "{}"'
+            shell = shell.format(flv_file, aac_file, mp4_file)
+            process = subprocess.Popen(shell, stdout=out_pipe, stderr=out_pipe, shell=True)
+            process.wait()
+            os.remove(flv_file)
+            os.remove(aac_file)
+        elif os.path.exists(flv_file):
+            os.rename(flv_file, mp4_file)
+        else:
+            raise RunningError('找不到下载的音视频文件')
     else:
-        raise RunningError('找不到下载的音视频文件')
+        pass
+        # mergeList = [x for x in os.listdir(path) if x.endswith('.flv')]
+        # mp4_file = os.path.abspath('{}/{}.mp4'.format(path, name))
+        # mergeList.sort()
+        # shell = 'ffmpeg -i "{}" -c copy -f mp4 -y "{}"'
+        # listVidStringFormat = "|".join(mergeList)
+        # shell.format("concat:"+ listVidStringFormat, mp4_file)
+        # process = subprocess.Popen(shell, stdout=out_pipe, stderr=out_pipe, shell=True)
+        # process.wait()
+
 
 
 class ParameterError(Exception):

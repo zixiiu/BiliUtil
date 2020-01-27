@@ -15,6 +15,7 @@ class Task:
         self.level = video.level
         self.video = video.video
         self.audio = video.audio
+        self.videoObj = video
         self.cover = cover
         self.name = name
         self.path = os.path.abspath(output)
@@ -41,11 +42,17 @@ class Task:
         if no_repeat and os.path.exists(os.path.join(self.path, self.name)):
             return None
         if self.level == 'old_version':
-            Util.aria2c_pull(self.aid, self.path, self.name + '.flv', self.video, show_process)
+            self.videoObj.sync()
+            self.video = self.videoObj.video
+            sec = 0
+            for i in range(len(self.video)):
+                self.videoObj.sync()
+                Util.aria2c_pull(self.aid, self.path, str(sec) + "_" + self.name + '.flv', [self.video[i]], show_process)
+                sec += 1
         elif self.level == 'new_version':
             Util.aria2c_pull(self.aid, self.path, self.name + '.aac', self.audio, show_process)
             Util.aria2c_pull(self.aid, self.path, self.name + '.flv', self.video, show_process)
 
-        Util.ffmpeg_merge(self.path, self.name, show_process)
+        Util.ffmpeg_merge(self.path, self.name, self.level, show_process)
         sys.stdout.flush()
         return self.aid
