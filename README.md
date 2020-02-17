@@ -1,4 +1,10 @@
 # BiliUtil
+##Additional Features
+> * 可以使用关键字过滤用户视频
+> * 在每次下载前重新sync链接避免使用过期链接
+> * 会下载old_version的所有视频（可能会有重复）
+> * 不会对old_version进行格式转化或合并（无法得知视频顺序）
+> * 对开始时漫长的fetch过程增加了进度条
 
 ![Windows](https://img.shields.io/badge/Windows-support-green.svg)
 ![Linux](https://img.shields.io/badge/Linux-testing-orange.svg)

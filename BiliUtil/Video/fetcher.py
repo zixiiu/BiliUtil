@@ -3,6 +3,7 @@ import os
 import BiliUtil.Util as Util
 import BiliUtil.Space as Space
 import BiliUtil.Video as Video
+from tqdm import tqdm
 
 
 class Fetcher:
@@ -44,7 +45,7 @@ class Fetcher:
             obj_name = "unknown"
 
         album_list = self.obj.get_album_list()
-        for album in album_list:
+        for album in tqdm(album_list, desc="Fetching..."):
             try:
                 album.sync(cookie)
             except Util.RunningError:
@@ -66,7 +67,7 @@ class Fetcher:
         av_list = list(set(av_list))
         return av_list
 
-    def load_task(self, output, exclude=None, v_filter=None):
+    def load_task(self, output, exclude=None, v_filter=None, keyword_filter=None ):
         """
         自动完成下载任务的批量生成
         :param output: 输出路径
@@ -84,13 +85,15 @@ class Fetcher:
             # 执行过滤策略
             if info['album'][1].aid in exclude:
                 continue
+            elif keyword_filter in info['album'][1].name:
+                continue
             elif v_filter is not None and v_filter.check_video(info['video'][1]):
                 continue
 
             # 创建新的下载任务
             full_path = os.path.join(base_path, info['obj'][0], info['album'][0])
             self.task_list.append(Video.Task(info['video'][1], full_path, info['video'][0], info['album'][1].cover))
-            task_list.append(info['album'][1].aid)
+            task_list.append((info['album'][1].aid, info['album'][1].name))
 
         task_list = list(set(task_list))
         return task_list

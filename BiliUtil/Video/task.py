@@ -50,6 +50,7 @@ class Task:
                 Util.aria2c_pull(self.aid, self.path, str(sec) + "_" + self.name + '.flv', [self.video[i]], show_process)
                 sec += 1
         elif self.level == 'new_version':
+            self.videoObj.sync()
             Util.aria2c_pull(self.aid, self.path, self.name + '.aac', self.audio, show_process)
             Util.aria2c_pull(self.aid, self.path, self.name + '.flv', self.video, show_process)
 
