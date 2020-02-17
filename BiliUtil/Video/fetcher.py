@@ -138,7 +138,11 @@ class Fetcher:
         :return: 完成下载的av号列表
         """
         av_list = []
+        tot = len(self.task_list)
+        this = 0
         for task in self.task_list:
+            this += 1
+            print("downloading video %.0f of %.0f"%(this, tot))
             av_list.append(task.start(show_process, no_repeat))
         av_list = list(set(av_list))
         return av_list
